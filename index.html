@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacked</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: black;
+            color: white;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+        #container {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #typing, #announce, #finalText {
+            font-size: 32px;
+            white-space: pre-line;
+            overflow: hidden;
+            opacity: 1;
+        }
+        #announce {
+            color: red;
+            display: none;
+        }
+        #finalText {
+            font-size: 48px;
+            font-weight: bold;
+            color: red;
+            display: none;
+        }
+        #image, #video {
+            display: none;
+        }
+        #image img {
+            max-width: 60%;
+            height: auto;
+        }
+        #video video {
+            max-width: 80%;
+            height: auto;
+        }
+        #startButton {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px 40px;
+            font-size: 24px;
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<button id="startButton">Click Here to Start</button>
+
+<div id="container" style="display:none;">
+    <div id="typing"></div>
+    <h1 id="announce">I WANT TO ANNOUNCE THAT</h1>
+    <div id="image"><img src="image.webp" alt="Hacked Image"></div>
+    <h2 id="finalText">BY AZURE CLOUD</h2>
+    <div id="video">
+        <video id="mainVideo" controls preload="auto">
+            <source src="video.mp4" type="video/mp4">
+        </video>
+    </div>
+</div>
+
+<audio id="errorSound" src="error.mp3" preload="auto"></audio>
+<audio id="imageSound" src="image-sound.mp3" preload="auto"></audio>
+
+<script>
+    let startButton = document.getElementById("startButton");
+    let container = document.getElementById("container");
+    let errorSound = document.getElementById("errorSound");
+    let imageSound = document.getElementById("imageSound");
+    let video = document.getElementById("mainVideo");
+
+    startButton.addEventListener("click", function() {
+        document.documentElement.requestFullscreen().catch(console.log); // Bật toàn màn hình
+        startButton.style.display = "none";
+        container.style.display = "flex";
+        
+        // Bỏ tắt tiếng và phát âm thanh
+        errorSound.muted = false;
+        imageSound.muted = false;
+        video.muted = false;
+
+        errorSound.play().catch(console.log);
+        
+        typeEffect();
+    });
+
+    let text = `🖥 SYSTEM ERROR: Unauthorized Access Detected!\n🔄 Restarting system…\n🟡 Verifying identity... [FAILED]\n🔴 Security Breach! Initiating lockdown…`;
+    let typingDiv = document.getElementById("typing");
+    let announceDiv = document.getElementById("announce");
+    let imageDiv = document.getElementById("image");
+    let finalText = document.getElementById("finalText");
+    let videoDiv = document.getElementById("video");
+
+    let i = 0;
+    function typeEffect() {
+        console.log("Typing effect started");
+        if (i < text.length) {
+            typingDiv.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typeEffect, 50);
+        } else {
+            console.log("Typing effect completed");
+            setTimeout(fadeOutText, 1000);
+        }
+    }
+
+    function fadeOutText() {
+        let fadeInterval = setInterval(() => {
+            typingDiv.style.opacity -= 0.05;
+            if (typingDiv.style.opacity <= 0) {
+                clearInterval(fadeInterval);
+                typingDiv.style.display = "none";
+                showAnnounce();
+            }
+        }, 100);
+    }
+
+    function showAnnounce() {
+        announceDiv.style.display = "block";
+        announceDiv.style.opacity = 0;
+        let opacity = 0;
+        let interval = setInterval(() => {
+            opacity += 0.05;
+            announceDiv.style.opacity = opacity;
+            if (opacity >= 1) {
+                clearInterval(interval);
+                setTimeout(showImage, 2000);
+            }
+        }, 100);
+    }
+
+    function showImage() {
+        imageDiv.style.display = "block";
+        imageSound.play().catch(console.log); // Phát âm thanh khi hiển thị hình ảnh
+        let opacity = 0;
+        let interval = setInterval(() => {
+            opacity += 0.05;
+            imageDiv.style.opacity = opacity;
+            if (opacity >= 1) {
+                clearInterval(interval);
+                setTimeout(showFinalText, 3000); // Chờ 3s trước khi hiển thị chữ BY AZURE CLOUD
+            }
+        }, 100);
+    }
+
+    function showFinalText() {
+        finalText.style.display = "block";
+        finalText.style.opacity = 0;
+        let opacity = 0;
+        let interval = setInterval(() => {
+            opacity += 0.05;
+            finalText.style.opacity = opacity;
+            if (opacity >= 1) {
+                clearInterval(interval);
+                setTimeout(fadeOutAll, 2000); // Chờ 2s trước khi làm mờ chữ và hình ảnh
+            }
+        }, 100);
+    }
+
+    function fadeOutAll() {
+        let fadeInterval = setInterval(() => {
+            announceDiv.style.opacity -= 0.05;
+            finalText.style.opacity -= 0.05;
+            imageDiv.style.opacity -= 0.05;
+            if (announceDiv.style.opacity <= 0 && finalText.style.opacity <= 0 && imageDiv.style.opacity <= 0) {
+                clearInterval(fadeInterval);
+                announceDiv.style.display = "none";
+                finalText.style.display = "none";
+                imageDiv.style.display = "none";
+                setTimeout(showVideo, 500);
+            }
+        }, 100);
+    }
+
+    function showVideo() {
+        videoDiv.style.display = "block";
+        video.play().catch(console.log);
+    }
+</script>
+
+</body>
+</html>
